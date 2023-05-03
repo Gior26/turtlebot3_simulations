@@ -31,9 +31,11 @@ def generate_launch_description():
 
     use_sim_time = LaunchConfiguration('use_sim_time', default='true')
     x_pose1 = LaunchConfiguration('x_pose1', default='4.45')
-    y_pose1 = LaunchConfiguration('y_pose1', default='2.5')
+    y_pose1 = LaunchConfiguration('y_pose1', default='0.5')
     x_pose2 = LaunchConfiguration('x_pose2', default='4.45')
-    y_pose2 = LaunchConfiguration('y_pose2', default='5.5')
+    y_pose2 = LaunchConfiguration('y_pose2', default='2.5')
+    x_pose3 = LaunchConfiguration('x_pose3', default='4.45')
+    y_pose3 = LaunchConfiguration('y_pose3', default='5.5')
 
     world = os.path.join(
         get_package_share_directory('turtlebot3_gazebo'),
@@ -84,6 +86,16 @@ def generate_launch_description():
             'namespace': 'tb3_2',
         }.items()
     )
+    spawn_turtlebot_cmd3 = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(launch_file_dir, 'spawn_turtlebot3_3.launch.py')
+        ),
+        launch_arguments={
+            'x_pose': x_pose3,
+            'y_pose': y_pose3,
+            'namespace': 'tb3_3',
+        }.items()
+    )
 
     ld = LaunchDescription()
 
@@ -93,5 +105,6 @@ def generate_launch_description():
     ld.add_action(robot_state_publisher_cmd)
     ld.add_action(spawn_turtlebot_cmd1)
     ld.add_action(spawn_turtlebot_cmd2)
+    ld.add_action(spawn_turtlebot_cmd3)
 
     return ld
