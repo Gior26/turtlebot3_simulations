@@ -419,8 +419,8 @@
     <plugin name='gazebo_ros_battery' filename='libgazebo_ros_battery.so'>
       <frame_id>base_link</frame_id>
       <namespace>/tb3_2</namespace>
-      <battery_topic>battery_status</battery_topic>
-      <consumer_topic>battery/consumer</consumer_topic>
+      <battery_topic>battery_state</battery_topic>
+      <consumer_topic>battery_consumer</consumer_topic>
       <battery_voltage_topic>battery_voltage</battery_voltage_topic>
       <publish_voltage>1</publish_voltage>
       <num_of_consumers>0</num_of_consumers>
