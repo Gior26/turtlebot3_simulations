@@ -84,7 +84,7 @@ def generate_launch_description():
                 'headless': 'True',
                 }.items())
 
-    timed_multirobot = TimerAction(period=5.0,
+    timed_multirobot = TimerAction(period=10.0,
             actions=[multi_robot_cmd])
 
 
