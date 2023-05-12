@@ -131,7 +131,7 @@
 
       <sensor name="hls_lfcd_lds" type="ray">
         <always_on>true</always_on>
-        <visualize>true</visualize>
+        <visualize>false</visualize>
         <pose>-0.032 0 0.171 0 0 0</pose>
         <update_rate>5</update_rate>
         <ray>
@@ -366,6 +366,7 @@
 
       <ros>
         <!-- <namespace>/tb3</namespace> -->
+          <remapping>/tf:=tf</remapping>
       </ros>
 
       <update_rate>30</update_rate>
@@ -404,5 +405,38 @@
       <joint_name>wheel_left_joint</joint_name>
       <joint_name>wheel_right_joint</joint_name>
     </plugin>      
+    <plugin name='gazebo_ros_battery' filename='libgazebo_ros_battery.so'>
+      <frame_id>base_link</frame_id>
+      <ros>
+        <!-- <namespace>/tb3</namespace> -->
+        <remapping>~/battery_state:=battery_states</remapping>
+        <remapping>~/battery_voltage:=battery_voltage</remapping>
+      </ros>
+      <battery_topic>battery_state</battery_topic>
+      <consumer_topic>battery_consumer</consumer_topic>
+      <battery_voltage_topic>battery_voltage</battery_voltage_topic>
+      <publish_voltage>1</publish_voltage>
+      <num_of_consumers>0</num_of_consumers>
+      <technology>2</technology>
+      <design_capacity>4.0</design_capacity>
+      <number_of_cells>6</number_of_cells>
+      <nominal_voltage>24</nominal_voltage>
+      <full_charge_voltage>25.2</full_charge_voltage>
+      <cut_off_voltage>18.0</cut_off_voltage>
+      <internal_resistance>0.11</internal_resistance>
+      <current_filter_tau>1</current_filter_tau>
+      <polarization_constant>0.07</polarization_constant>
+      <exponential_voltage>0.7</exponential_voltage>
+      <exponential_capacity>3.0</exponential_capacity>
+      <characteristic_time>420</characteristic_time>
+      <reversible_voltage_temp>0.05</reversible_voltage_temp>
+      <arrhenius_rate_polarization>850</arrhenius_rate_polarization>
+      <capacity_temp_coeff>0.01</capacity_temp_coeff>
+      <design_temperature>25</design_temperature>
+      <temperature_response_tau>0.5</temperature_response_tau>
+      <use_nonlinear_model>1</use_nonlinear_model>
+      <update_rate>10</update_rate>
+      <rosDebugLevel>Debug</rosDebugLevel>
+    </plugin>
   </model>
 </sdf>
