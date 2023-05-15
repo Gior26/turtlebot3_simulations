@@ -135,7 +135,7 @@ def generate_launch_description():
                 arguments=[TextSubstitution(text=robot['name'])]),
 
             IncludeLaunchDescription(
-                PythonLaunchDescriptionSource(os.path.join(bringup_dir,
+                PythonLaunchDescriptionSource(os.path.join(gazebo_bringup_dir,
                                                            'launch',
                                                            'tb3_simulation_launch.py')),
                 launch_arguments={'namespace': robot['name'],
