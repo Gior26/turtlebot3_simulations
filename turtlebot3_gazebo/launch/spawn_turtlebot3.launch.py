@@ -29,7 +29,7 @@ def generate_launch_description():
     model_folder = 'turtlebot3_' + TURTLEBOT3_MODEL
     urdf_path = os.path.join(
             get_package_share_directory('turtlebot3_gazebo'),
-            'models', model_folder, 'model1.sdf')
+            'models', model_folder, 'model.sdf')
 
     # Launch configuration variables specific to simulation
     x_pose = LaunchConfiguration('x_pose', default='0.0')
@@ -53,7 +53,7 @@ def generate_launch_description():
     start_gazebo_ros_spawner_cmd = Node(
         package='gazebo_ros',
         executable='spawn_entity.py',
-        namespace=namespace,
+        #namespace=namespace,
         arguments=[
             '-entity', entity,
             '-file', urdf_path,
