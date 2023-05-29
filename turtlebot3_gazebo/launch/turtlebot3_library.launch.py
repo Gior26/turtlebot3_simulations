@@ -29,8 +29,14 @@ def generate_launch_description():
     pkg_gazebo_ros = get_package_share_directory('gazebo_ros')
 
     use_sim_time = LaunchConfiguration('use_sim_time', default='true')
+    robot_conf = LaunchConfiguration('robots')
     world = LaunchConfiguration('world')
     map_yaml_file = LaunchConfiguration('map')
+
+    declare_robots_cmd = DeclareLaunchArgument(
+        'robots',
+        default_value=os.path.join(bringup_dir, 'params', 'robots.yaml'),
+        description='Full path to configuration for spawning multiple robots')
 
     declare_world_cmd = DeclareLaunchArgument(
         'world',
@@ -41,9 +47,6 @@ def generate_launch_description():
         'map',
         default_value=os.path.join(bringup_dir, 'maps', 'library-new.yaml'),
         description='Full path to map file to load')
-
-    #world = os.path.join( get_package_share_directory('turtlebot3_gazebo'),
-    #    'worlds', 'biblioteca.sdf')
 
     gzserver_cmd = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
@@ -76,6 +79,7 @@ def generate_launch_description():
                 'use_namespace': 'True',
                 'map': map_yaml_file,
                 'world': world,
+                'robots': robot_conf,
                 'use_sim_time': 'True',
                 'autostart': 'True',
                 'use_rviz': 'False',
@@ -91,6 +95,7 @@ def generate_launch_description():
     ld = LaunchDescription()
 
     # Add the commands to the launch description
+    ld.add_action(declare_robots_cmd)
     ld.add_action(declare_world_cmd)
     ld.add_action(declare_map_yaml_cmd)
     ld.add_action(gzserver_cmd)

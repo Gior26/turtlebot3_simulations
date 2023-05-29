@@ -21,12 +21,12 @@ import os
 from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, ExecuteProcess, IncludeLaunchDescription
+from launch.actions import (DeclareLaunchArgument, ExecuteProcess,
+        IncludeLaunchDescription)
 from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, PythonExpression
 from launch_ros.actions import Node
-
 
 def generate_launch_description():
     # Get the launch directory
@@ -134,11 +134,6 @@ def generate_launch_description():
         default_value='True',
         description='Whether to start RVIZ')
 
-    declare_simulator_cmd = DeclareLaunchArgument(
-        'headless',
-        default_value='True',
-        description='Whether to execute gzclient)')
-
     declare_world_cmd = DeclareLaunchArgument(
         'world',
         # TODO(orduno) Switch back once ROS argument passing has been fixed upstream
@@ -194,8 +189,8 @@ def generate_launch_description():
                           'rviz_config': rviz_config_file}.items())
 
     bringup_cmd = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            os.path.join(launch_dir, 'bringup_launch.py')),
+        PythonLaunchDescriptionSource(os.path.join(turtlebot_gazebo_dir,
+            'launch', 'bringup_launch.py')),
         launch_arguments={'namespace': namespace,
                           'use_namespace': use_namespace,
                           'slam': slam,
@@ -223,7 +218,6 @@ def generate_launch_description():
     ld.add_action(declare_use_simulator_cmd)
     ld.add_action(declare_use_robot_state_pub_cmd)
     ld.add_action(declare_use_rviz_cmd)
-    ld.add_action(declare_simulator_cmd)
     ld.add_action(declare_world_cmd)
     ld.add_action(declare_robot_name_cmd)
     ld.add_action(declare_robot_sdf_cmd)
