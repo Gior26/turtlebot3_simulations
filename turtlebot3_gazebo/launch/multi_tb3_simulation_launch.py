@@ -23,16 +23,19 @@ The robots co-exist on a shared environment and are controlled by independent na
 """
 
 import os
+import yaml
+from pathlib import Path
 
 from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
 from launch.actions import (DeclareLaunchArgument, ExecuteProcess, GroupAction,
-                            IncludeLaunchDescription, LogInfo)
+                            IncludeLaunchDescription, LogInfo, TimerAction)
 from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, TextSubstitution
 from launch_ros.actions import Node
+from nav2_common.launch import ReplaceString, RewrittenYaml
 
 
 def generate_launch_description():
@@ -41,17 +44,9 @@ def generate_launch_description():
     gazebo_bringup_dir = get_package_share_directory('turtlebot3_gazebo')
     launch_dir = os.path.join(bringup_dir, 'launch')
 
-    # Names and poses of the robots
-    robots = [
-        {'name': 'tb3_1', 'x_pose': 4.45, 'y_pose': 0.5, 'z_pose': 0.01,
-                           'roll': 0.0, 'pitch': 0.0, 'yaw': 0.0},
-        {'name': 'tb3_2', 'x_pose': 4.45, 'y_pose': 2.5, 'z_pose': 0.01,
-                           'roll': 0.0, 'pitch': 0.0, 'yaw': 0.0},
-        {'name': 'tb3_3', 'x_pose': 4.45, 'y_pose': 5.5, 'z_pose': 0.01,
-                           'roll': 0.0, 'pitch': 0.0, 'yaw': 0.0}]
-
     # Simulation settings
     world = LaunchConfiguration('world')
+    robot_conf = LaunchConfiguration('robots')
     simulator = LaunchConfiguration('simulator')
 
     # On this example all robots are launched with the same settings
@@ -64,6 +59,11 @@ def generate_launch_description():
     log_settings = LaunchConfiguration('log_settings', default='true')
 
     # Declare the launch arguments
+    declare_robots_cmd = DeclareLaunchArgument(
+        'robots',
+        default_value=os.path.join(gazebo_bringup_dir, 'params', 'robots.yaml'),
+        description='Full path to configuration for spawning multiple robots')
+
     declare_world_cmd = DeclareLaunchArgument(
         'world',
         default_value=os.path.join(bringup_dir, 'worlds', 'world_only.model'),
@@ -76,23 +76,13 @@ def generate_launch_description():
 
     declare_map_yaml_cmd = DeclareLaunchArgument(
         'map',
-        default_value=os.path.join(bringup_dir, 'maps', 'turtlebot3_world.yaml'),
+        default_value=os.path.join(bringup_dir, 'maps', 'library-new.yaml'),
         description='Full path to map file to load')
 
-    declare_robot1_params_file_cmd = DeclareLaunchArgument(
-        'tb3_1_params_file',
-        default_value=os.path.join(gazebo_bringup_dir, 'params', 'nav2_multirobot_params_1.yaml'),
+    declare_robot_params_template_file_cmd = DeclareLaunchArgument(
+        'tb3_template_params_file',
+        default_value=os.path.join(gazebo_bringup_dir, 'params', 'nav2_multirobot_params_template.yaml'),
         description='Full path to the ROS2 parameters file to use for robot1 launched nodes')
-
-    declare_robot2_params_file_cmd = DeclareLaunchArgument(
-        'tb3_2_params_file',
-        default_value=os.path.join(gazebo_bringup_dir, 'params', 'nav2_multirobot_params_2.yaml'),
-        description='Full path to the ROS2 parameters file to use for robot2 launched nodes')
-
-    declare_robot3_params_file_cmd = DeclareLaunchArgument(
-        'tb3_3_params_file',
-        default_value=os.path.join(gazebo_bringup_dir, 'params', 'nav2_multirobot_params_3.yaml'),
-        description='Full path to the ROS2 parameters file to use for robot3 launched nodes')
 
     declare_autostart_cmd = DeclareLaunchArgument(
         'autostart', default_value='false',
@@ -115,8 +105,17 @@ def generate_launch_description():
 
     # Define commands for launching the navigation instances
     nav_instances_cmds = []
+    time = 10.0
+    with open(os.path.join(gazebo_bringup_dir, 'params', 'robots.yaml'), 'r') as f:
+        robots = yaml.safe_load(f)
     for robot in robots:
-        params_file = LaunchConfiguration(f"{robot['name']}_params_file")
+        params_file = RewrittenYaml(
+                source_file=os.path.join(gazebo_bringup_dir, 'params', 'nav2_multirobot_params_template.yaml'),
+                param_rewrites={ 'topic': '/'+robot['name']+'/scan',
+                    'x': str(robot['x_pose']),
+                    'y': str(robot['y_pose']),
+                    'z': str(robot['z_pose']) },
+                convert_types=True)
 
         group = GroupAction([
             IncludeLaunchDescription(
@@ -176,7 +175,10 @@ def generate_launch_description():
                 msg=[robot['name'], ' autostart: ', autostart])
         ])
 
-        nav_instances_cmds.append(group)
+        timed_group = TimerAction(period=time,
+                actions=[group])
+        time += 15.0
+        nav_instances_cmds.append(timed_group)
 
     # Create the launch description and populate
     ld = LaunchDescription()
@@ -184,10 +186,9 @@ def generate_launch_description():
     # Declare the launch options
     ld.add_action(declare_simulator_cmd)
     ld.add_action(declare_world_cmd)
+    ld.add_action(declare_robots_cmd)
     ld.add_action(declare_map_yaml_cmd)
-    ld.add_action(declare_robot1_params_file_cmd)
-    ld.add_action(declare_robot2_params_file_cmd)
-    ld.add_action(declare_robot3_params_file_cmd)
+    ld.add_action(declare_robot_params_template_file_cmd)
     ld.add_action(declare_use_rviz_cmd)
     ld.add_action(declare_autostart_cmd)
     ld.add_action(declare_rviz_config_file_cmd)

@@ -1,0 +1,41 @@
+---
+- r1:
+  name: 'tb3_1'
+  x_pose: 4.45
+  y_pose: 0.5
+  z_pose: 0.01
+  roll: 0.0
+  pitch: 0.0
+  yaw: 0.0
+- r2:
+  name: 'tb3_2'
+  x_pose: 4.45
+  y_pose: 1.5
+  z_pose: 0.01
+  roll: 0.0
+  pitch: 0.0
+  yaw: 0.0
+- r3:
+  name: 'tb3_3'
+  x_pose: 4.45
+  y_pose: 2.5
+  z_pose: 0.01
+  roll: 0.0
+  pitch: 0.0
+  yaw: 0.0
+- r4:
+  name: 'tb3_4'
+  x_pose: 4.45
+  y_pose: 5.0
+  z_pose: 0.01
+  roll: 0.0
+  pitch: 0.0
+  yaw: 0.0
+- r5:
+  name: 'tb3_5'
+  x_pose: 4.45
+  y_pose: 6.0
+  z_pose: 0.01
+  roll: 0.0
+  pitch: 0.0
+  yaw: 0.0
