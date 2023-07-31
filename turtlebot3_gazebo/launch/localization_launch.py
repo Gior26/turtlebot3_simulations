@@ -172,19 +172,20 @@ def generate_launch_description():
                 name='lifecycle_manager_localization',
                 parameters=[{'use_sim_time': use_sim_time,
                              'autostart': autostart,
-                             'node_names': lifecycle_nodes}]),
+                             'node_names': lifecycle_nodes,
+                             'attempt_respawn_reconnection': True}]),
         ],
     )
 
-    loggerino1 = LogInfo(msg=[namespace, ' configured_params: ', configured_params])
-    loggerino2 = LogInfo(msg=[namespace, ' map: ', map_yaml_file])
+    conffile_log = LogInfo(msg=[namespace, ' configured_params: ', configured_params])
+    mapfile_log = LogInfo(msg=[namespace, ' map: ', map_yaml_file])
     # Create the launch description and populate
     ld = LaunchDescription()
 
     # Set environment variables
     ld.add_action(stdout_linebuf_envvar)
-    ld.add_action(loggerino1)
-    ld.add_action(loggerino2)
+    ld.add_action(conffile_log)
+    ld.add_action(mapfile_log)
 
     # Declare the launch options
     ld.add_action(declare_namespace_cmd)
