@@ -94,7 +94,7 @@ def generate_launch_description():
         description='Full path to the ROS2 parameters file to use for all launched nodes')
 
     declare_autostart_cmd = DeclareLaunchArgument(
-        'autostart', default_value='true',
+        'autostart', default_value='True',
         description='Automatically startup the nav2 stack')
 
     declare_use_composition_cmd = DeclareLaunchArgument(
@@ -123,6 +123,8 @@ def generate_launch_description():
                 output='screen',
                 respawn=use_respawn,
                 respawn_delay=2.0,
+                # Uncomment if you need GDB debugging
+                #prefix=['xterm -T map_server -e gdb -ex run --args'],
                 parameters=[{'use_sim_time':use_sim_time},
                             {'yaml_filename':map_yaml_file},
                             {'save_map_timeout': 5.0}],
@@ -135,6 +137,8 @@ def generate_launch_description():
                 output='screen',
                 respawn=use_respawn,
                 respawn_delay=2.0,
+                # Uncomment if you need GDB debugging
+                #prefix=['xterm -T amcl -e gdb -ex run --args'],
                 parameters=[configured_params],
                 arguments=['--ros-args', '--log-level', log_level],
                 remappings=remappings),
@@ -144,9 +148,12 @@ def generate_launch_description():
                 name='lifecycle_manager_localization',
                 output='screen',
                 arguments=['--ros-args', '--log-level', log_level],
-                parameters=[{'use_sim_time': use_sim_time},
+                parameters=[#{'use_sim_time': use_sim_time},
                             {'autostart': autostart},
-                            {'node_names': lifecycle_nodes}])
+                            {'node_names': lifecycle_nodes},
+                            {'bond_respawn_max_duration': 20.0},
+                            {'bond_timeout': 4.0},
+                            {'attempt_respawn_reconnection': True}])
         ]
     )
 

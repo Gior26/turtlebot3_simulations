@@ -55,6 +55,7 @@ def generate_launch_description():
     autostart = LaunchConfiguration('autostart')
     rviz_config_file = LaunchConfiguration('rviz_config')
     use_robot_state_pub = LaunchConfiguration('use_robot_state_pub')
+    use_respawn = LaunchConfiguration('use_respawn')
     use_rviz = LaunchConfiguration('use_rviz')
     log_settings = LaunchConfiguration('log_settings', default='true')
 
@@ -97,6 +98,11 @@ def generate_launch_description():
         'use_robot_state_pub',
         default_value='True',
         description='Whether to start the robot state publisher')
+
+    declare_use_respawn = DeclareLaunchArgument(
+        'use_respawn',
+        default_value='True',
+        description='Whether to restart nav2 crashed processes')
 
     declare_use_rviz_cmd = DeclareLaunchArgument(
         'use_rviz',
@@ -147,6 +153,7 @@ def generate_launch_description():
                                   'use_simulator': 'False',
                                   'headless': 'False',
                                   'use_robot_state_pub': use_robot_state_pub,
+                                  'use_respawn': use_respawn,
                                   'x_pose': TextSubstitution(text=str(robot['x_pose'])),
                                   'y_pose': TextSubstitution(text=str(robot['y_pose'])),
                                   'z_pose': TextSubstitution(text=str(robot['z_pose'])),
@@ -190,6 +197,7 @@ def generate_launch_description():
     ld.add_action(declare_map_yaml_cmd)
     ld.add_action(declare_robot_params_template_file_cmd)
     ld.add_action(declare_use_rviz_cmd)
+    ld.add_action(declare_use_respawn)
     ld.add_action(declare_autostart_cmd)
     ld.add_action(declare_rviz_config_file_cmd)
     ld.add_action(declare_use_robot_state_pub_cmd)
