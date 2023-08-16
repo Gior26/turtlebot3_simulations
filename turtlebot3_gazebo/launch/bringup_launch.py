@@ -154,15 +154,15 @@ def generate_launch_description():
                               'container_name': 'nav2_container'}.items()),
     ])
 
-    loggerino1 = LogInfo(msg=['BRINGUP ', namespace, ' params_file: ', params_file])
-    loggerino2 = LogInfo(msg=['BRINGUP ', namespace, ' map: ', map_yaml_file])
+    paramfile_log = LogInfo(msg=['BRINGUP ', namespace, ' params_file: ', params_file])
+    mapfile_log = LogInfo(msg=['BRINGUP ', namespace, ' map: ', map_yaml_file])
     # Create the launch description and populate
     ld = LaunchDescription()
 
     # Set environment variables
     ld.add_action(stdout_linebuf_envvar)
-    #ld.add_action(loggerino1)
-    #ld.add_action(loggerino2)
+    #ld.add_action(paramfile_log)
+    #ld.add_action(mapfile_log)
 
     # Declare the launch options
     ld.add_action(declare_namespace_cmd)
