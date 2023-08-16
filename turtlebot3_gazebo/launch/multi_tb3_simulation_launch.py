@@ -139,6 +139,14 @@ def generate_launch_description():
             Node(package='robot_writer', executable='robot_writer', output='screen',
                 arguments=[TextSubstitution(text=robot['name'])]),
 
+            TimerAction(period = 5.0, 
+                        actions = [GroupAction([
+                            Node(package='robot_reader', executable='robot_reader', output='screen',
+                                arguments=[TextSubstitution(text=robot['name'])])
+                            ])
+                        ]
+            ),
+
             IncludeLaunchDescription(
                 PythonLaunchDescriptionSource(os.path.join(gazebo_bringup_dir,
                                                            'launch',
