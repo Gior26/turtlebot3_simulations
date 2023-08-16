@@ -177,7 +177,7 @@ def generate_launch_description():
 
         timed_group = TimerAction(period=time,
                 actions=[group])
-        time += 15.0
+        time += 8.0
         nav_instances_cmds.append(timed_group)
 
     # Create the launch description and populate
