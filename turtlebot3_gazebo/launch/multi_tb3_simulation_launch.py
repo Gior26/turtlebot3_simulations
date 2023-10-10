@@ -48,6 +48,7 @@ def generate_launch_description():
     world = LaunchConfiguration('world')
     robot_conf = LaunchConfiguration('robots')
     simulator = LaunchConfiguration('simulator')
+    decrease_battery = LaunchConfiguration('decrease_battery')
 
     # On this example all robots are launched with the same settings
     map_yaml_file = LaunchConfiguration('map')
@@ -109,6 +110,11 @@ def generate_launch_description():
         default_value='True',
         description='Whether to start RVIZ')
 
+    declare_decrease_battery = DeclareLaunchArgument(
+        'decrease_battery',
+        default_value='True',
+        description='Whether to decrease battery charge level on successful goal')
+
     # Define commands for launching the navigation instances
     nav_instances_cmds = []
     time = 10.0
@@ -134,6 +140,9 @@ def generate_launch_description():
                                   'rviz_config': rviz_config_file}.items()),
 
             Node(package='nav_system', executable='navigator', output='screen',
+                parameters=[
+                    {'decrease_battery': decrease_battery}
+                    ]
                 arguments=[TextSubstitution(text=robot['name'])]),
 
             Node(package='robot_writer', executable='robot_writer', output='screen',
@@ -209,6 +218,7 @@ def generate_launch_description():
     ld.add_action(declare_autostart_cmd)
     ld.add_action(declare_rviz_config_file_cmd)
     ld.add_action(declare_use_robot_state_pub_cmd)
+    ld.add_action(declare_decrease_battery)
 
     for simulation_instance_cmd in nav_instances_cmds:
         ld.add_action(simulation_instance_cmd)
