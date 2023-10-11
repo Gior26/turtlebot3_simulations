@@ -142,7 +142,7 @@ def generate_launch_description():
             Node(package='nav_system', executable='navigator', output='screen',
                 parameters=[
                     {'decrease_battery': decrease_battery}
-                    ]
+                    ],
                 arguments=[TextSubstitution(text=robot['name'])]),
 
             Node(package='robot_writer', executable='robot_writer', output='screen',

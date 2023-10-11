@@ -32,6 +32,7 @@ def generate_launch_description():
     robot_conf = LaunchConfiguration('robots')
     world = LaunchConfiguration('world')
     map_yaml_file = LaunchConfiguration('map')
+    decrease_battery = LaunchConfiguration('decrease_battery')
 
     declare_robots_cmd = DeclareLaunchArgument(
         'robots',
@@ -47,6 +48,11 @@ def generate_launch_description():
         'map',
         default_value=os.path.join(bringup_dir, 'maps', 'library-new.yaml'),
         description='Full path to map file to load')
+
+    declare_decrease_battery = DeclareLaunchArgument(
+        'decrease_battery',
+        default_value='True',
+        description='Whether to decrease battery on goal success')
 
     gzserver_cmd = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
@@ -79,6 +85,7 @@ def generate_launch_description():
             launch_arguments={
                 'use_namespace': 'True',
                 'map': map_yaml_file,
+                'decrease_battery': decrease_battery,
                 'world': world,
                 'robots': robot_conf,
                 'use_sim_time': 'True',
@@ -102,6 +109,7 @@ def generate_launch_description():
     ld.add_action(declare_robots_cmd)
     ld.add_action(declare_world_cmd)
     ld.add_action(declare_map_yaml_cmd)
+    ld.add_action(declare_decrease_battery)
     ld.add_action(gzserver_cmd)
     ld.add_action(gzclient_cmd)
     ld.add_action(robot_state_publisher_cmd)
