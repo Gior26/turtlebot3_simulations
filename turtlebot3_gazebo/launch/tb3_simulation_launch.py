@@ -22,7 +22,7 @@ from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
 from launch.actions import (DeclareLaunchArgument, ExecuteProcess,
-        IncludeLaunchDescription)
+        IncludeLaunchDescription, GroupAction)
 from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, PythonExpression
@@ -158,48 +158,50 @@ def generate_launch_description():
     with open(urdf, 'r') as infp:
         robot_description = infp.read()
 
-    start_robot_state_publisher_cmd = Node(
-        condition=IfCondition(use_robot_state_pub),
-        package='robot_state_publisher',
-        executable='robot_state_publisher',
-        name='robot_state_publisher',
-        namespace=namespace,
-        output='screen',
-        parameters=[{'use_sim_time': use_sim_time,
-                     'robot_description': robot_description}],
-        remappings=remappings)
 
-    start_gazebo_spawner_cmd = Node(
-        package='gazebo_ros',
-        executable='spawn_entity.py',
-        output='screen',
-        arguments=[
-            '-entity', robot_name,
-            '-file', robot_sdf,
-            '-robot_namespace', namespace,
-            '-x', pose['x'], '-y', pose['y'], '-z', pose['z'],
-            '-R', pose['R'], '-P', pose['P'], '-Y', pose['Y']])
+    gazebo_actions = GroupAction([
+        Node(
+            package='gazebo_ros',
+            executable='spawn_entity.py',
+            output='screen',
+            arguments=[
+                '-entity', robot_name,
+                '-file', robot_sdf,
+                '-robot_namespace', namespace,
+                '-x', pose['x'], '-y', pose['y'], '-z', pose['z'],
+                '-R', pose['R'], '-P', pose['P'], '-Y', pose['Y']])])
+    actions = GroupAction([
+        Node(
+            condition=IfCondition(use_robot_state_pub),
+            package='robot_state_publisher',
+            executable='robot_state_publisher',
+            name='robot_state_publisher',
+            namespace=namespace,
+            output='screen',
+            parameters=[{'use_sim_time': use_sim_time,
+                         'robot_description': robot_description}],
+            remappings=remappings),
 
-    rviz_cmd = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            os.path.join(launch_dir, 'rviz_launch.py')),
-        condition=IfCondition(use_rviz),
-        launch_arguments={'namespace': namespace,
-                          'use_namespace': use_namespace,
-                          'rviz_config': rviz_config_file}.items())
-
-    bringup_cmd = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(os.path.join(turtlebot_gazebo_dir,
-            'launch', 'bringup_launch.py')),
-        launch_arguments={'namespace': namespace,
-                          'use_namespace': use_namespace,
-                          'slam': slam,
-                          'map': map_yaml_file,
-                          'use_sim_time': use_sim_time,
-                          'params_file': params_file,
-                          'autostart': autostart,
-                          'use_composition': use_composition,
-                          'use_respawn': use_respawn}.items())
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(
+                os.path.join(launch_dir, 'rviz_launch.py')),
+            condition=IfCondition(use_rviz),
+            launch_arguments={'namespace': namespace,
+                              'use_namespace': use_namespace,
+                              'rviz_config': rviz_config_file}.items()),
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(os.path.join(turtlebot_gazebo_dir,
+                'launch', 'bringup_launch.py')),
+            launch_arguments={'namespace': namespace,
+                              'use_namespace': use_namespace,
+                              'slam': slam,
+                              'map': map_yaml_file,
+                              'use_sim_time': use_sim_time,
+                              'params_file': params_file,
+                              'autostart': autostart,
+                              'use_composition': use_composition,
+                              'use_respawn': use_respawn}.items()),
+        ])
 
     # Create the launch description and populate
     ld = LaunchDescription()
@@ -223,12 +225,8 @@ def generate_launch_description():
     ld.add_action(declare_robot_sdf_cmd)
     ld.add_action(declare_use_respawn_cmd)
 
-    # Add any conditioned actions
-    ld.add_action(start_gazebo_spawner_cmd)
-
     # Add the actions to launch all of the navigation nodes
-    ld.add_action(start_robot_state_publisher_cmd)
-    ld.add_action(rviz_cmd)
-    ld.add_action(bringup_cmd)
+    ld.add_action(actions)
+    ld.add_action(gazebo_actions)
 
     return ld

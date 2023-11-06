@@ -58,6 +58,7 @@ def generate_launch_description():
     use_robot_state_pub = LaunchConfiguration('use_robot_state_pub')
     use_respawn = LaunchConfiguration('use_respawn')
     use_rviz = LaunchConfiguration('use_rviz')
+    use_proxies = LaunchConfiguration('use_proxies')
     log_settings = LaunchConfiguration('log_settings', default='true')
 
     # Declare the launch arguments
@@ -109,6 +110,12 @@ def generate_launch_description():
         'use_rviz',
         default_value='True',
         description='Whether to start RVIZ')
+
+    declare_use_proxies_cmd = DeclareLaunchArgument(
+        'use_proxies',
+        default_value='true',
+        choices=['true', 'false'],
+        description='Whether to enable ROS2 proxies.')
 
     declare_decrease_battery = DeclareLaunchArgument(
         'decrease_battery',
@@ -185,20 +192,23 @@ def generate_launch_description():
                 ),
                 launch_arguments={'use_sim_time': 'True'}.items()
             ),
-            Node(package="inbound_proxy", executable="inbound_proxy",
+            GroupAction([
+                Node(package="inbound_proxy", executable="inbound_proxy",
                     output='screen',
                     arguments=[
                         TextSubstitution(text=robot['name']),
                         TextSubstitution(text=str(robot['proxy_domain_id']))
                         ]
-            ),
+                    ),
 
-            Node(package="outbound_proxy", executable="outbound_proxy",
+                Node(package="outbound_proxy", executable="outbound_proxy",
                     output='screen',
                     arguments=[
                         TextSubstitution(text=robot['name']),
                         TextSubstitution(text=str(robot['proxy_domain_id']))
                         ]
+                    )],
+                condition=IfCondition(use_proxies)
             ),
 
             LogInfo(
@@ -236,6 +246,7 @@ def generate_launch_description():
     ld.add_action(declare_map_yaml_cmd)
     ld.add_action(declare_robot_params_template_file_cmd)
     ld.add_action(declare_use_rviz_cmd)
+    ld.add_action(declare_use_proxies_cmd)
     ld.add_action(declare_use_respawn)
     ld.add_action(declare_autostart_cmd)
     ld.add_action(declare_rviz_config_file_cmd)

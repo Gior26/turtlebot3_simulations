@@ -71,14 +71,6 @@ def generate_launch_description():
         )
     )
 
-    robot_state_publisher_cmd = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            os.path.join(launch_file_dir, 'robot_state_publisher.launch.py')
-        ),
-        launch_arguments={'use_sim_time': use_sim_time}.items()
-    )
-
-
     multi_robot_cmd = IncludeLaunchDescription(
             PythonLaunchDescriptionSource(os.path.join(launch_file_dir,
                 'multi_tb3_simulation_launch.py')),
@@ -112,7 +104,6 @@ def generate_launch_description():
     ld.add_action(declare_decrease_battery)
     ld.add_action(gzserver_cmd)
     ld.add_action(gzclient_cmd)
-    ld.add_action(robot_state_publisher_cmd)
     ld.add_action(timed_multirobot)
 
     return ld
