@@ -179,6 +179,28 @@ def generate_launch_description():
                                   'yaw': TextSubstitution(text=str(robot['yaw'])),
                                   'robot_name':TextSubstitution(text=robot['name']), }.items()),
 
+            IncludeLaunchDescription(
+                PythonLaunchDescriptionSource(
+                    os.path.join(gazebo_bringup_dir, 'launch', 'robot_state_publisher.launch.py')
+                ),
+                launch_arguments={'use_sim_time': 'True'}.items()
+            ),
+            Node(package="inbound_proxy", executable="inbound_proxy",
+                    output='screen',
+                    arguments=[
+                        TextSubstitution(text=robot['name']),
+                        TextSubstitution(text=str(robot['proxy_domain_id']))
+                        ]
+            ),
+
+            Node(package="outbound_proxy", executable="outbound_proxy",
+                    output='screen',
+                    arguments=[
+                        TextSubstitution(text=robot['name']),
+                        TextSubstitution(text=str(robot['proxy_domain_id']))
+                        ]
+            ),
+
             LogInfo(
                 condition=IfCondition(log_settings),
                 msg=['Launching ', robot['name']]),

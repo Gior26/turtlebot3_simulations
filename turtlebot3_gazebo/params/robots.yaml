@@ -7,6 +7,7 @@
   roll: 0.0
   pitch: 0.0
   yaw: 0.0
+  proxy_domain_id: 1
 - r2:
   name: 'tb3_2'
   x_pose: 4.45
@@ -15,6 +16,7 @@
   roll: 0.0
   pitch: 0.0
   yaw: 0.0
+  proxy_domain_id: 1
 - r3:
   name: 'tb3_3'
   x_pose: 4.45
@@ -23,6 +25,7 @@
   roll: 0.0
   pitch: 0.0
   yaw: 0.0
+  proxy_domain_id: 1
 - r4:
   name: 'tb3_4'
   x_pose: 4.45
@@ -31,6 +34,7 @@
   roll: 0.0
   pitch: 0.0
   yaw: 0.0
+  proxy_domain_id: 1
 - r5:
   name: 'tb3_5'
   x_pose: 4.45
@@ -39,3 +43,4 @@
   roll: 0.0
   pitch: 0.0
   yaw: 0.0
+  proxy_domain_id: 1
