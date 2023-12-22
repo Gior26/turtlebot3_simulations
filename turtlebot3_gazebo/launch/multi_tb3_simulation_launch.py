@@ -136,7 +136,8 @@ def generate_launch_description():
                     'z': str(robot['z_pose']) },
                 convert_types=True)
 
-        group = GroupAction([
+        group = GroupAction(
+                [
             IncludeLaunchDescription(
                 PythonLaunchDescriptionSource(
                         os.path.join(launch_dir, 'rviz_launch.py')),
@@ -153,12 +154,18 @@ def generate_launch_description():
                 arguments=[TextSubstitution(text=robot['name'])]),
 
             Node(package='robot_writer', executable='robot_writer', output='screen',
-                arguments=[TextSubstitution(text=robot['name'])]),
+                arguments=[
+                    TextSubstitution(text=robot['name']),
+                    TextSubstitution(text=robot['name'])
+                    ]),
 
             TimerAction(period = 5.0, 
                         actions = [GroupAction([
                             Node(package='robot_reader', executable='robot_reader', output='screen',
-                                arguments=[TextSubstitution(text=robot['name'])])
+                                arguments=[
+                                    TextSubstitution(text=robot['name']),
+                                    TextSubstitution(text=robot['name'])
+                                    ])
                             ])
                         ]
             ),
@@ -197,6 +204,7 @@ def generate_launch_description():
                     output='screen',
                     arguments=[
                         TextSubstitution(text=robot['name']),
+                        TextSubstitution(text=robot['name']),
                         TextSubstitution(text=str(robot['proxy_domain_id']))
                         ]
                     ),
@@ -204,6 +212,7 @@ def generate_launch_description():
                 Node(package="outbound_proxy", executable="outbound_proxy",
                     output='screen',
                     arguments=[
+                        TextSubstitution(text=robot['name']),
                         TextSubstitution(text=robot['name']),
                         TextSubstitution(text=str(robot['proxy_domain_id']))
                         ]
