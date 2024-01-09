@@ -200,7 +200,7 @@ def generate_launch_description():
                 launch_arguments={'use_sim_time': 'True'}.items()
             ),
             GroupAction([
-                Node(package="inbound_proxy", executable="inbound_proxy",
+                Node(package="inbound_proxy", executable="board_inbound_proxy",
                     output='screen',
                     arguments=[
                         TextSubstitution(text=robot['name']),
@@ -209,7 +209,7 @@ def generate_launch_description():
                         ]
                     ),
 
-                Node(package="outbound_proxy", executable="outbound_proxy",
+                Node(package="outbound_proxy", executable="board_outbound_proxy",
                     output='screen',
                     arguments=[
                         TextSubstitution(text=robot['name']),
