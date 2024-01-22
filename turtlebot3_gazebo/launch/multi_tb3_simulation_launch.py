@@ -125,7 +125,7 @@ def generate_launch_description():
     # Define commands for launching the navigation instances
     nav_instances_cmds = []
     time = 10.0
-    with open(os.path.join(gazebo_bringup_dir, 'params', 'robots.yaml'), 'r') as f:
+    with open(os.path.abspath(os.environ['ROBOTS_YAML']), 'r') as f:
         robots = yaml.safe_load(f)
     for robot in robots:
         params_file = RewrittenYaml(
