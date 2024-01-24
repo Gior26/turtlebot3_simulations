@@ -53,6 +53,7 @@ bt_navigator:
     robot_base_frame: base_link
     odom_topic: /odom
     bt_loop_duration: 10
+    default_nav_to_pose_bt_xml: /opt/ros/humble/share/nav2_bt_navigator/behavior_trees/navigate_to_pose_w_replanning_goal_patience_and_recovery.xml
     default_server_timeout: 20
     plugin_lib_names:
       - nav2_compute_path_to_pose_action_bt_node
@@ -218,8 +219,10 @@ local_costmap:
 global_costmap:
   global_costmap:
     ros__parameters:
+      update_frequency: 1.0
       use_sim_time: true
       robot_radius: 0.22
+      resolution: 0.05
       plugins: ["static_layer", "obstacle_layer", "inflation_layer"]
       obstacle_layer:
         plugin: "nav2_costmap_2d::ObstacleLayer"
