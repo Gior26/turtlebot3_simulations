@@ -41,10 +41,10 @@ amcl:
     scan_topic: scan
     set_initial_pose: true
     initial_pose:
-      x: <x_pose>
-      y: <y_pose>
-      z: <z_pose>
-      yaw: <yaw_pose>
+      x: 0.5 #<x_pose>
+      y: 0.5 #<y_pose>
+      z: 0.01  #<z_pose>
+      yaw: 0.0 #<yaw_pose>
 
 bt_navigator:
   ros__parameters:
