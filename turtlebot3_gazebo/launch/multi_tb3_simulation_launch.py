@@ -133,6 +133,7 @@ def generate_launch_description():
                 param_rewrites={ 'topic': '/'+robot['name']+'/scan',
                     'x': str(robot['x_pose']),
                     'y': str(robot['y_pose']),
+                    'yaw': str(robot['yaw']),
                     'z': str(robot['z_pose']) },
                 convert_types=True)
 
