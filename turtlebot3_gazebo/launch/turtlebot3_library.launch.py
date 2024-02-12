@@ -51,7 +51,7 @@ def generate_launch_description():
 
     declare_decrease_battery = DeclareLaunchArgument(
         'decrease_battery',
-        default_value='True',
+        default_value='False',
         description='Whether to decrease battery on goal success')
 
     gzserver_cmd = IncludeLaunchDescription(

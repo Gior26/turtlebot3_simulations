@@ -119,7 +119,7 @@ def generate_launch_description():
 
     declare_decrease_battery = DeclareLaunchArgument(
         'decrease_battery',
-        default_value='True',
+        default_value='False',
         description='Whether to decrease battery charge level on successful goal')
 
     # Define commands for launching the navigation instances
@@ -148,7 +148,7 @@ def generate_launch_description():
                                   'use_namespace': 'True',
                                   'rviz_config': rviz_config_file}.items()),
 
-            Node(package='nav_system', executable='navigator', output='screen',
+            Node(package='nav_system', executable='poc_navigator', output='screen',
                 parameters=[
                     {'decrease_battery': decrease_battery}
                     ],
