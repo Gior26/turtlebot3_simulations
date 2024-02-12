@@ -205,7 +205,6 @@ def generate_launch_description():
                     output='screen',
                     arguments=[
                         TextSubstitution(text=robot['name']),
-                        TextSubstitution(text=robot['name']),
                         TextSubstitution(text=str(robot['proxy_domain_id']))
                         ]
                     ),
@@ -213,7 +212,6 @@ def generate_launch_description():
                 Node(package="outbound_proxy", executable="board_outbound_proxy",
                     output='screen',
                     arguments=[
-                        TextSubstitution(text=robot['name']),
                         TextSubstitution(text=robot['name']),
                         TextSubstitution(text=str(robot['proxy_domain_id']))
                         ]
