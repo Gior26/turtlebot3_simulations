@@ -30,10 +30,10 @@ def generate_launch_description():
     pkg_gazebo_ros = get_package_share_directory('gazebo_ros')
 
     use_sim_time = LaunchConfiguration('use_sim_time', default='true')
-    x_pose = LaunchConfiguration('x_pose', default='1.5')
-    y_pose = LaunchConfiguration('y_pose', default='2.5')
+    x_pose = LaunchConfiguration('x_pose', default='0.5')
+    y_pose = LaunchConfiguration('y_pose', default='0.5')
 
-    world = os.path.abspath('/home/ws/NODES/Demo_Resources/world.sdf')
+    world = os.path.abspath('/home/ws/NODES/use_case_resources/store/world.sdf')
 
     gzserver_cmd = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
