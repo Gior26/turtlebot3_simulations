@@ -150,7 +150,10 @@ def generate_launch_description():
 
             Node(package='nav_system', executable='poc_navigator', output='screen',
                 parameters=[
-                    {'decrease_battery': decrease_battery}
+                    {'decrease_battery': decrease_battery},
+                    {'x': robot['x_pose']},
+                    {'y': robot['y_pose']},
+                    {'yaw': robot['yaw']}
                     ],
                 arguments=[TextSubstitution(text=robot['name'])]),
 
