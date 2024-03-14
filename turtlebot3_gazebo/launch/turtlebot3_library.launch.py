@@ -33,6 +33,7 @@ def generate_launch_description():
     world = LaunchConfiguration('world')
     map_yaml_file = LaunchConfiguration('map')
     decrease_battery = LaunchConfiguration('decrease_battery')
+    dock_enabled = LaunchConfiguration('dock_enabled')
 
     declare_robots_cmd = DeclareLaunchArgument(
         'robots',
@@ -53,6 +54,10 @@ def generate_launch_description():
         'decrease_battery',
         default_value='False',
         description='Whether to decrease battery on goal success')
+    declare_dock_enabled = DeclareLaunchArgument(
+        'dock_enabled',
+        default_value='False',
+        description='Whether to return to initial position on goal success')
 
     gzserver_cmd = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
@@ -78,6 +83,7 @@ def generate_launch_description():
                 'use_namespace': 'True',
                 'map': map_yaml_file,
                 'decrease_battery': decrease_battery,
+                'dock_enabled': dock_enabled,
                 'world': world,
                 'robots': robot_conf,
                 'use_sim_time': 'True',
@@ -102,6 +108,7 @@ def generate_launch_description():
     ld.add_action(declare_world_cmd)
     ld.add_action(declare_map_yaml_cmd)
     ld.add_action(declare_decrease_battery)
+    ld.add_action(declare_dock_enabled)
     ld.add_action(gzserver_cmd)
     ld.add_action(gzclient_cmd)
     ld.add_action(timed_multirobot)

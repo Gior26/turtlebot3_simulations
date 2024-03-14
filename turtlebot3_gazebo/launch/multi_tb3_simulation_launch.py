@@ -49,6 +49,7 @@ def generate_launch_description():
     robot_conf = LaunchConfiguration('robots')
     simulator = LaunchConfiguration('simulator')
     decrease_battery = LaunchConfiguration('decrease_battery')
+    dock_enabled = LaunchConfiguration('dock_enabled')
 
     # On this example all robots are launched with the same settings
     map_yaml_file = LaunchConfiguration('map')
@@ -122,6 +123,11 @@ def generate_launch_description():
         default_value='False',
         description='Whether to decrease battery charge level on successful goal')
 
+    declare_dock_enabled = DeclareLaunchArgument(
+        'dock_enabled',
+        default_value='False',
+        description='Whether to return to initial position on successful goal')
+
     # Define commands for launching the navigation instances
     nav_instances_cmds = []
     time = 10.0
@@ -151,6 +157,7 @@ def generate_launch_description():
             Node(package='nav_system', executable='poc_navigator', output='screen',
                 parameters=[
                     {'decrease_battery': decrease_battery},
+                    {'dock_enabled': dock_enabled},
                     {'x': robot['x_pose']},
                     {'y': robot['y_pose']},
                     {'yaw': robot['yaw']}
@@ -263,6 +270,7 @@ def generate_launch_description():
     ld.add_action(declare_rviz_config_file_cmd)
     ld.add_action(declare_use_robot_state_pub_cmd)
     ld.add_action(declare_decrease_battery)
+    ld.add_action(declare_dock_enabled)
 
     for simulation_instance_cmd in nav_instances_cmds:
         ld.add_action(simulation_instance_cmd)
