@@ -50,6 +50,7 @@ def generate_launch_description():
     simulator = LaunchConfiguration('simulator')
     decrease_battery = LaunchConfiguration('decrease_battery')
     dock_enabled = LaunchConfiguration('dock_enabled')
+    sleep_time = LaunchConfiguration('sleep_time')
 
     # On this example all robots are launched with the same settings
     map_yaml_file = LaunchConfiguration('map')
@@ -62,7 +63,10 @@ def generate_launch_description():
     use_proxies = LaunchConfiguration('use_proxies')
     log_settings = LaunchConfiguration('log_settings', default='true')
 
-    # Declare the launch arguments
+    declare_sleep_time_cmd = DeclareLaunchArgument(
+        'sleep_time', default_value='0',
+        description='Time in seconds robots waits after reaching a navigation position')
+
     declare_robots_cmd = DeclareLaunchArgument(
         'robots',
         default_value=os.path.join(gazebo_bringup_dir, 'params', 'robots.yaml'),
@@ -158,6 +162,7 @@ def generate_launch_description():
                 parameters=[
                     {'decrease_battery': decrease_battery},
                     {'dock_enabled': dock_enabled},
+                    {'sleep_time': sleep_time},
                     {'x': robot['x_pose']},
                     {'y': robot['y_pose']},
                     {'yaw': robot['yaw']}
@@ -271,6 +276,7 @@ def generate_launch_description():
     ld.add_action(declare_use_robot_state_pub_cmd)
     ld.add_action(declare_decrease_battery)
     ld.add_action(declare_dock_enabled)
+    ld.add_action(declare_sleep_time_cmd)
 
     for simulation_instance_cmd in nav_instances_cmds:
         ld.add_action(simulation_instance_cmd)

@@ -34,6 +34,11 @@ def generate_launch_description():
     map_yaml_file = LaunchConfiguration('map')
     decrease_battery = LaunchConfiguration('decrease_battery')
     dock_enabled = LaunchConfiguration('dock_enabled')
+    sleep_time = LaunchConfiguration('sleep_time')
+
+    declare_sleep_time_cmd = DeclareLaunchArgument(
+        'sleep_time', default_value='0',
+        description='Time in seconds robots waits after reaching a navigation position')
 
     declare_robots_cmd = DeclareLaunchArgument(
         'robots',
@@ -84,6 +89,7 @@ def generate_launch_description():
                 'map': map_yaml_file,
                 'decrease_battery': decrease_battery,
                 'dock_enabled': dock_enabled,
+                'sleep_time': sleep_time,
                 'world': world,
                 'robots': robot_conf,
                 'use_sim_time': 'True',
@@ -104,6 +110,7 @@ def generate_launch_description():
     ld = LaunchDescription()
 
     # Add the commands to the launch description
+    ld.add_action(declare_sleep_time_cmd)
     ld.add_action(declare_robots_cmd)
     ld.add_action(declare_world_cmd)
     ld.add_action(declare_map_yaml_cmd)
