@@ -58,11 +58,13 @@ def generate_launch_description():
     declare_decrease_battery = DeclareLaunchArgument(
         'decrease_battery',
         default_value='False',
-        description='Whether to decrease battery on goal success')
+        description='Whether to decrease battery on goal success.')
+
     declare_dock_enabled = DeclareLaunchArgument(
         'dock_enabled',
-        default_value='False',
-        description='Whether to return to initial position on goal success')
+        default_value='0',
+        choices=['0', '1', '2'],
+        description='Whether to not return (0) or to return (1) to initial position on successful goal and (2) dock to base station.')
 
     gzserver_cmd = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(

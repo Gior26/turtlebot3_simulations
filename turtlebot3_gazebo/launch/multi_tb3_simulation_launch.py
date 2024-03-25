@@ -125,12 +125,13 @@ def generate_launch_description():
     declare_decrease_battery = DeclareLaunchArgument(
         'decrease_battery',
         default_value='False',
-        description='Whether to decrease battery charge level on successful goal')
+        description='Whether to decrease battery charge level on successful goal.')
 
     declare_dock_enabled = DeclareLaunchArgument(
         'dock_enabled',
-        default_value='False',
-        description='Whether to return to initial position on successful goal')
+        default_value='0',
+        choices=['0', '1', '2'],
+        description='Whether to not return (0) or to return (1) to initial position on successful goal and (2) dock to base station.')
 
     # Define commands for launching the navigation instances
     nav_instances_cmds = []
