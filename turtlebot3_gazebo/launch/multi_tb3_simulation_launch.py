@@ -176,6 +176,9 @@ def generate_launch_description():
                     TextSubstitution(text=robot['name'])
                     ]),
 
+            Node(package='robot_status', executable='tb3_status',
+                namespace=TextSubstitution(text=robot['name']), output='screen'),
+
             TimerAction(period = 5.0, 
                         actions = [GroupAction([
                             Node(package='robot_reader', executable='robot_reader', output='screen',
