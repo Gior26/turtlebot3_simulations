@@ -13,12 +13,12 @@
       <link name="body">
         <visual name="visual">
           <geometry>
-            <mesh><uri>model://library/chair.dae</uri></mesh>
+            <mesh><uri>model://use_case_resources/library/meshes/chair.dae</uri></mesh>
           </geometry>
         </visual>
         <collision name="collision">
           <geometry>
-            <mesh><uri>model://library/chair-collision.dae</uri></mesh>
+            <mesh><uri>model://use_case_resources/library/meshes/chair-collision.dae</uri></mesh>
           </geometry>
         </collision>
       </link>
@@ -29,12 +29,12 @@
       <link name="body">
         <visual name="visual">
           <geometry>
-            <mesh><uri>model://library/chair.dae</uri></mesh>
+            <mesh><uri>model://use_case_resources/library/meshes/chair.dae</uri></mesh>
           </geometry>
         </visual>
         <collision name="collision">
           <geometry>
-            <mesh><uri>model://library/chair-collision.dae</uri></mesh>
+            <mesh><uri>model://use_case_resources/library/meshes/chair-collision.dae</uri></mesh>
           </geometry>
         </collision>
       </link>
@@ -46,14 +46,14 @@
         <visual name="visual">
           <geometry>
             <mesh>
-              <uri>model://library/biblioteca-xl.dae</uri>
+              <uri>model://use_case_resources/library/meshes/biblioteca-xl.dae</uri>
             </mesh>
           </geometry>
         </visual>
         <collision name="collision">
           <geometry>
             <mesh>
-              <uri>model://library/biblioteca-collisioni-xl.dae</uri>
+              <uri>model://use_case_resources/library/meshes/biblioteca-collisioni-xl.dae</uri>
             </mesh>
           </geometry>
         </collision>
